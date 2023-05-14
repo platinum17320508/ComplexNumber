@@ -1,0 +1,30 @@
+#fullGround{
+    width : 100vw;
+    height : 100vh;
+    display: flex;
+    flex-direction: column;
+}
+#myCanvas{
+    @media (max-width: 70vh) {width : 100vw; height : 100vw;}
+    @media (min-width: 70vh) {width : 70vh; height : 70vh;}
+}
+#UI{
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+#subUiArea{
+    display: frex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+.ui{
+    display: flex;
+    flex-direction: row;
+    color: #000;
+    background-color: #fff;
+    border: 1px solid #000;
+}
+.input{
+    border: 0px;
+}
