@@ -219,6 +219,33 @@ class mainUI {
             reloadCanvas();
         };
     }
+} 
+function compute(selector) {
+    formula = variable[selector].outputFormula();
+    if(formula[0]){
+        switch(formula[1]) {
+            case 0:
+                variable[selector].inputRealPart(parseFloat(variable[formula[2]].outputRealPart()) + parseFloat(variable[formula[3]].outputRealPart()));
+                variable[selector].inputImaginaryPart(parseFloat(variable[formula[2]].outputImaginaryPart()) + parseFloat(variable[formula[3]].outputImaginaryPart()));
+            break;
+
+            case 1:
+                variable[selector].inputRealPart(variable[formula[2]].outputRealPart() - variable[formula[3]].outputRealPart());
+                variable[selector].inputImaginaryPart(variable[formula[2]].outputImaginaryPart() - variable[formula[3]].outputImaginaryPart());
+            break;
+                
+            case 2:
+                variable[selector].inputRealPart(variable[formula[2]].outputRealPart() * variable[formula[3]].outputRealPart() - variable[formula[2]].outputImaginaryPart() * variable[formula[3]].outputImaginaryPart());
+                variable[selector].inputImaginaryPart(variable[formula[2]].outputRealPart() * variable[formula[3]].outputImaginaryPart() + variable[formula[3]].outputRealPart() * variable[formula[2]].outputImaginaryPart());
+            break;
+            
+            case 3:
+                variable[selector].inputRealPart((variable[formula[2]].outputRealPart() * variable[formula[3]].outputRealPart() + variable[formula[2]].outputImaginaryPart() * variable[formula[3]].outputImaginaryPart()) / (variable[formula[3]].outputRealPart() * variable[formula[3]].outputRealPart() + variable[formula[3]].outputImaginaryPart() * variable[formula[3]].outputImaginaryPart()));
+                variable[selector].inputImaginaryPart((variable[formula[3]].outputRealPart() * variable[formula[2]].outputImaginaryPart()  - variable[formula[2]].outputRealPart() * variable[formula[3]].outputImaginaryPart()) / (variable[formula[3]].outputRealPart() * variable[formula[3]].outputRealPart() + variable[formula[3]].outputImaginaryPart() * variable[formula[3]].outputImaginaryPart()));
+            break;
+        }
+    }
+    
 }
 
 function compute(selector) {
