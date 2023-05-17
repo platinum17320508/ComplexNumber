@@ -109,6 +109,71 @@ class ComplexNumber {
         this.imaginaryNumber.style = "width: 20px";
         this.imaginaryNumber.textContent = "i ";
         this.valueArea.appendChild(this.imaginaryNumber);
+
+        //計算on/off
+        this.computeValid = document.createElement("input");
+        this.computeValid.className = "ui";
+        this.computeValid.type = "checkbox";
+        this.computeValid.checked = false;
+        this.computeValid.style.height = `${UI_HEIGHT-1}px`;
+        this.numberUiUnit.appendChild(this.computeValid);
+
+        //計算内容枠
+        this.formula = document.createElement("div");
+        this.formula.className = "ui";
+        this.formula.style.height = `${UI_HEIGHT-1}px`;
+        this.numberUiUnit.appendChild(this.formula);
+
+        //被演算子1
+        this.operand1 = document.createElement("input");
+        Object.assign(this.operand1,{
+            classname: "input",
+            type: "number",
+            value: 0,
+            min: 0,
+            max: this.id-1
+        });
+        this.operand1.style.width = "50px";
+        this.formula.appendChild(this.operand1);
+        
+        //演算子
+        this.operator = document.createElement("select");
+        this.operator.className = "input";
+
+        this.option0 = document.createElement("option");
+        this.option0.value = 0;
+        this.option0.textContent = "+";
+        this.operator.appendChild(this.option0);
+
+        this.option1 = document.createElement("option");
+        this.option1.value = 1;
+        this.option1.textContent = "-";
+        this.operator.appendChild(this.option1);
+
+        this.option2 = document.createElement("option");
+        this.option2.value = 2;
+        this.option2.textContent = "×";
+        this.operator.appendChild(this.option2);
+
+        this.option3 = document.createElement("option");
+        this.option3.value = 3;
+        this.option3.textContent = "÷";
+        this.operator.appendChild(this.option3);
+
+        this.formula.appendChild(this.operator);
+
+        //被演算子2
+        this.operand2 = document.createElement("input");
+        Object.assign(this.operand2,{
+            classname: "input",
+            type: "number",
+            value: 0,
+            min: 0,
+            max: this.id-1
+        });
+        this.operand2.style.width = "50px";
+        this.formula.appendChild(this.operand2);
+
     }
     inputRealPart(value) {
         this.realPart = value;
@@ -123,6 +188,10 @@ class ComplexNumber {
     }
     outputImaginaryPart() {
         return this.imaginaryPart;
+    }
+    outputFormula(){
+        return [this.computeValid.checked, parseInt(this.operator.value), parseInt(this.operand1.value), parseInt(this.operand2.value)];
+        
     }
     drawPoint() {
         if(this.valid){
@@ -153,6 +222,33 @@ class mainUI {
         };
     }
 } 
+function compute(selector) {
+    formula = variable[selector].outputFormula();
+    if(formula[0]){
+        switch(formula[1]) {
+            case 0:
+                variable[selector].inputRealPart(parseFloat(variable[formula[2]].outputRealPart()) + parseFloat(variable[formula[3]].outputRealPart()));
+                variable[selector].inputImaginaryPart(parseFloat(variable[formula[2]].outputImaginaryPart()) + parseFloat(variable[formula[3]].outputImaginaryPart()));
+            break;
+
+            case 1:
+                variable[selector].inputRealPart(variable[formula[2]].outputRealPart() - variable[formula[3]].outputRealPart());
+                variable[selector].inputImaginaryPart(variable[formula[2]].outputImaginaryPart() - variable[formula[3]].outputImaginaryPart());
+            break;
+                
+            case 2:
+                variable[selector].inputRealPart(variable[formula[2]].outputRealPart() * variable[formula[3]].outputRealPart() - variable[formula[2]].outputImaginaryPart() * variable[formula[3]].outputImaginaryPart());
+                variable[selector].inputImaginaryPart(variable[formula[2]].outputRealPart() * variable[formula[3]].outputImaginaryPart() + variable[formula[3]].outputRealPart() * variable[formula[2]].outputImaginaryPart());
+            break;
+            
+            case 3:
+                variable[selector].inputRealPart((variable[formula[2]].outputRealPart() * variable[formula[3]].outputRealPart() + variable[formula[2]].outputImaginaryPart() * variable[formula[3]].outputImaginaryPart()) / (variable[formula[3]].outputRealPart() * variable[formula[3]].outputRealPart() + variable[formula[3]].outputImaginaryPart() * variable[formula[3]].outputImaginaryPart()));
+                variable[selector].inputImaginaryPart((variable[formula[3]].outputRealPart() * variable[formula[2]].outputImaginaryPart()  - variable[formula[2]].outputRealPart() * variable[formula[3]].outputImaginaryPart()) / (variable[formula[3]].outputRealPart() * variable[formula[3]].outputRealPart() + variable[formula[3]].outputImaginaryPart() * variable[formula[3]].outputImaginaryPart()));
+            break;
+        }
+    }
+    
+}
 
 function resetCanvas() {
     ctx.beginPath();
@@ -175,6 +271,7 @@ function reloadCanvas() {
     resetCanvas();
     var count = 0;
     while(count < pointCount) {
+        compute(count);
         variable[count].drawPoint();
         count ++;
     }
