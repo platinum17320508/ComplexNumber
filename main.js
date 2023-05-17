@@ -112,9 +112,11 @@ class ComplexNumber {
     }
     inputRealPart(value) {
         this.realPart = value;
+        this.uiRealPartArea.value = value;
     }
     inputImaginaryPart(value) {
         this.imaginaryPart = value;
+        this.uiImaginaryPartArea.value = value;
     }
     outputRealPart() {
         return this.realPart;
